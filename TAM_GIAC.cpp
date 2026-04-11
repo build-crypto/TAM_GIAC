@@ -3,7 +3,7 @@
 #include "ToaDo.h"
 #include <cmath>
 using namespace std;
-
+const double EPS = 1e-6;
 void TAM_GIAC::SET_TAM_GIAC()
 {
     cout<<"Nhap Toa do Tam Giac: \n";
@@ -34,10 +34,10 @@ void TAM_GIAC::GET_LENGTH_TAM_GIAC()
 }
 int TAM_GIAC::Check_TAM_GIAC()
 {
-    if (LA==LB&&LB==LC) return 1;
-    else if (LA==LB||LB==LC||LA==LC) return 2;
-    else if (LA*LA+LB*LB==LC*LC||LC*LC+LB*LB==LA*LA||LC*LC+LA*LA==LB*LB) return 3;
-    else if (LA+LB>=LC||LC+LB>=LA||LA+LC>=LB) return 0;
+    if (LA+LB<=LC||LC+LB<=LA||LA+LC<=LB) return 0;
+    else if (abs(LA-LB)<EPS&&abs(LB-LC)<EPS) return 1;
+    else if (abs(LA-LB)<EPS||abs(LB-LC)<EPS||abs(LA-LC)<EPS) return 2;
+    else if (abs(LA*LA+LB*LB-LC*LC)<EPS||abs(LC*LC+LB*LB-LA*LA)<EPS||abs(LC*LC+LA*LA-LB*LB)<EPS) return 3;
     else return 4;
 }
 void TAM_GIAC::Categorise(int t)
@@ -90,6 +90,12 @@ ToaDo TAM_GIAC::Central()
     ToaDo D(xO,yO);
     return D;
 }
+
+
+double TAM_GIAC::fix(double x) {
+    if (abs(x) < EPS) return 0;
+    return x;
+}
 void TAM_GIAC::Circle()
 {
     ToaDo D = this->Central();
@@ -109,18 +115,20 @@ void TAM_GIAC::Circle()
 
     tX = iA.x*cos(T) - iA.y*sin(T);
     tY = iA.x*sin(T) + iA.y*cos(T);
-    iA.x = tX;
-    iA.y = tY;
+    iA.x = fix(tX);
+    iA.y = fix(tY);
 
     tX = iB.x*cos(T) - iB.y*sin(T);
     tY = iB.x*sin(T) + iB.y*cos(T);
-    iB.x = tX;
-    iB.y = tY;
+     iB.x = fix(tX);
+    iB.y = fix(tY);
 
     tX = iC.x*cos(T) - iC.y*sin(T);
     tY = iC.x*sin(T) + iC.y*cos(T);
-    iC.x = tX;
-    iC.y = tY;
+
+    iC.x = fix(tX);
+    iC.y = fix(tY);
+
 
     iB.x -= m;
     iB.y -= n;
@@ -128,4 +136,22 @@ void TAM_GIAC::Circle()
     iC.y -= n;
     iA.x -= m;
     iA.y -= n;
+    LA = sqrt((iA.x-iB.x)*(iA.x-iB.x)+(iA.y-iB.y)*(iA.y-iB.y));
+    LB = sqrt((iB.x-iC.x)*(iB.x-iC.x)+(iB.y-iC.y)*(iB.y-iC.y));
+    LC = sqrt((iC.x-iA.x)*(iC.x-iA.x)+(iC.y-iA.y)*(iC.y-iA.y));
+
 }
+void TAM_GIAC::Scale()
+{
+    ToaDo D = this->Central();
+    cout<<"Nhap chi so Scale: ";
+    double k;
+    cin>>k;
+    iA.Scale_Point(D,k);
+    iB.Scale_Point(D,k);
+    iC.Scale_Point(D,k);
+    LA = sqrt((iA.x-iB.x)*(iA.x-iB.x)+(iA.y-iB.y)*(iA.y-iB.y));
+    LB = sqrt((iB.x-iC.x)*(iB.x-iC.x)+(iB.y-iC.y)*(iB.y-iC.y));
+    LC = sqrt((iC.x-iA.x)*(iC.x-iA.x)+(iC.y-iA.y)*(iC.y-iA.y));
+}
+
