@@ -13,3 +13,8 @@ void ToaDo::GET_ToaDo()
     cout<<"Toa do x: "<<x<<'\n';
     cout<<"Toa do y: "<<y<<'\n';
 }
+void ToaDo::Scale_Point(ToaDo T,double k)
+{
+    x = T.x + k*(x-T.x);
+    y = T.y + k*(y-T.y);
+}
