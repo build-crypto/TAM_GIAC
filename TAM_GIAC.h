@@ -21,6 +21,8 @@ class TAM_GIAC
         void Move_TAM_GIAC();
         void Circle();
         ToaDo Central();
+        double fix(double x);
+        void Scale();
     protected:
 
     private:
