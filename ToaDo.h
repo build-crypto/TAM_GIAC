@@ -10,6 +10,7 @@ class ToaDo
         ToaDo(double a = 0,double b = 0){x = a;y = b;};
         void SET_ToaDo();
         void GET_ToaDo();
+        void Scale_Point(ToaDo T,double k);
     friend class TAM_GIAC;
 } ;
 
